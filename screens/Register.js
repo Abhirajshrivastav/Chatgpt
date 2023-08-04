@@ -6,14 +6,13 @@ import PageContainer from '../components/PageContainer'
 import Input from '../components/Input';
 import Button from '../components/Button'
 import { reducer } from "../utils/reducers/formReducer";
-import { validateInput } from '../utils/actions/formActions'
+import { validateInput } from '../utils/actions/formActions';
 import { getFirebaseApp } from '../utils/firebaseHelper'
-import {getAuth, createUserWithEmailandPassword} from "firebase/auth"
+import {getAuth,createUserWithEmailAndPassword} from "firebase/auth"
 import { ref , child , set , getDatabase} from "firebase/database"
-import { isLoading } from 'expo-font'
 
 const initialState = {
-  inputValus: {
+  inputValues: {
     fullName: "",
     email: "",
     password: ""
@@ -35,25 +34,27 @@ const Register = ({navigation}) => {
   const inputChangedHandler = useCallback(
     (inputId, inputValue) => {
         const result = validateInput(inputId, inputValue)
-        dispatchFormState({ inputId, validationResult: result, inputValue })
+        console.log("input")
+        dispatchFormState({ type: "INPUT_CHANGE", inputId, validationResult: result, inputValue })
+
     },
     [dispatchFormState]
 )
 
  
-  const createUser = async (fullName, email, userId) => {
-    const userData = {
-        fullName,
-        email,
-        userId,
-        signUpDate: new Date().toISOString(),
-    }
+const createUser = async (fullName, email, userId) => {
+  const userData = {
+      fullName,
+      email,
+      userId,
+      signUpDate: new Date().toISOString(),
+  }
 
-    const dbRef = ref(getDatabase())
-    const childRef = child(dbRef, `users/${userId}`)
-    await set(childRef, userData)
+  const dbRef = ref(getDatabase())
+  const childRef = child(dbRef, `users/${userId}`)
+  await set(childRef, userData)
 
-    return userData
+  return userData
 }
 
 
@@ -63,11 +64,12 @@ const authHandler = async () => {
   setIsLoading(true)
 
   try {
-      const result = await createUserWithEmailandPassword(
+      const result = await createUserWithEmailAndPassword(
           auth,
           formState.inputValues.email,
           formState.inputValues.password
       )
+      // console.log("auth1")
 
       const { uid } = result.user
 
@@ -77,13 +79,14 @@ const authHandler = async () => {
           uid
       )
 
+      // console.log("auth")
       if (userData) {
           setIsLoading(false)
           navigation.navigate('Login')
       }
   } catch (error) {
       const errorCode = error.code
-      let message = 'Something went wrong !'
+      let message = error.code
       if (errorCode === 'auth/email-already-in-use') {
           message = 'This email is already in use'
       }
@@ -96,9 +99,13 @@ const authHandler = async () => {
   // Display error if any error occured 
   useEffect(() => {
     if (error) {
-        Alert.alert('An error occured', error)
+      Alert.alert("An error occurred", error);
     }
-}, [error])
+    // return a cleanup function
+    return () => {
+      setError(null);
+    };
+  }, [error]);
 
   return (
    <SafeAreaView 

@@ -86,7 +86,7 @@ const authHandler = async () => {
       }
   } catch (error) {
       const errorCode = error.code
-      let message = error.code
+      let message = "Something went wrong"
       if (errorCode === 'auth/email-already-in-use') {
           message = 'This email is already in use'
       }

@@ -11,6 +11,7 @@ import { validateInput } from '../utils/actions/formActions'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { getFirebaseApp } from '../utils/firebaseHelper'
 
+
 const initialState = {
   inputValus: {
     email: "",
@@ -47,7 +48,7 @@ const Login = ({ navigation })  => {
       );
       if (result){
         setIsLoading(false)
-        navigation.navigate('Home')
+        navigation.navigate('BottomTabNavigation')
       }
     }catch(error){
       const errorCode = error.code;

@@ -48,7 +48,7 @@ const Login = ({ navigation })  => {
       );
       if (result){
         setIsLoading(false)
-        navigation.navigate('BottomTabNavigation')
+        navigation.navigate('Home')
       }
     }catch(error){
       const errorCode = error.code;

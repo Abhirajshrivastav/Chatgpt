@@ -9,7 +9,7 @@ const AppNavigation = () => {
   return (
     <NavigationContainer>
         <Stack.Navigator>
-        <Stack.Screen
+        {/* <Stack.Screen
                     name="Welcome"
                     component={Welcome}
                     options={{
@@ -29,7 +29,7 @@ const AppNavigation = () => {
                     options={{
                         headerShown: false,
                     }}
-                />
+                /> */}
                 <Stack.Screen
                 name="Home"
                 component={Home}
@@ -56,4 +56,4 @@ const AppNavigation = () => {
   )
 }
 
-export default AppNavigation
+export default AppNavigation;
